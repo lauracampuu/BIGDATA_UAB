@@ -1,0 +1,28 @@
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+import json
+
+
+api_client_id = ""
+api_client_secret = ""
+
+
+
+spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(api_client_id, api_client_secret))
+
+playlist_id = ""
+offset= 0
+
+def get_playlist(offset):
+    resposta = spotify.playlist_items("37i9dQZF1DXaxEKcoCdWHD", offset=offset)
+    with open('data.json', 'w', encoding='utf-8') as f:
+        json.dump(resposta, f, ensure_ascii=False, indent=4)
+    if resposta["next"] == None:
+        print("final")
+        pass
+    else:
+        offset = offset+100
+        print("nova petició")
+        get_playlist(offset)
+
+get_playlist(offset)
