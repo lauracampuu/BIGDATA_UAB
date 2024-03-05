@@ -1,13 +1,14 @@
-public = "0swrnz6ij4dcrugdadtu8ni92ua1zr"
-secret = "06m5kxdq4qdh9qu0kutamtpc798822"
+public = ""
+secret = ""
 
 from twitchAPI.twitch import Twitch
 import json
+import time
 
 twitch = Twitch(public, secret)
 next = None
 def get_str(next):
-    resposta = twitch.get_streams(language="ca", after=next)
+    resposta = twitch.get_streams(language="es", after=next, first=100)
     print(len(resposta["data"]))
     with open("streams.json", 'w', encoding='utf-8') as f:
         json.dump(resposta, f, ensure_ascii=False, indent=4)
@@ -21,3 +22,7 @@ def get_str(next):
         pass
 
 get_str(next)
+
+
+
+
