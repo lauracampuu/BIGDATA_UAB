@@ -1,0 +1,23 @@
+public = "0swrnz6ij4dcrugdadtu8ni92ua1zr"
+secret = "06m5kxdq4qdh9qu0kutamtpc798822"
+
+from twitchAPI.twitch import Twitch
+import json
+
+twitch = Twitch(public, secret)
+next = None
+def get_str(next):
+    resposta = twitch.get_streams(language="ca", after=next)
+    print(len(resposta["data"]))
+    with open("streams.json", 'w', encoding='utf-8') as f:
+        json.dump(resposta, f, ensure_ascii=False, indent=4)
+    try:
+        next = resposta["pagination"]["cursor"]
+        print("hi ha una nova pàgina")
+        loop = loop+1
+        get_str(next, loop)
+    except:
+        print("final")
+        pass
+
+get_str(next)
