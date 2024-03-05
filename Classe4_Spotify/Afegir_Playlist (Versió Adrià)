@@ -1,7 +1,7 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import json
-
+import glob
 
 api_client_id = ""
 api_client_secret = ""
@@ -10,12 +10,12 @@ api_client_secret = ""
 
 spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(api_client_id, api_client_secret))
 
-playlist_id = ""
+playlist_list= ["37i9dQZF1DX2EiUAL7Wdfc", "37i9dQZF1DWV7FWPDK0Dg1", "37i9dQZF1DWVJv1UsWItkB"]
 offset= 0
 
-def get_playlist(offset):
-    resposta = spotify.playlist_items("37i9dQZF1DXaxEKcoCdWHD", offset=offset)
-    with open('data.json', 'w', encoding='utf-8') as f:
+def get_playlist(playlist, offset):
+    resposta = spotify.playlist_items(playlist, offset=offset)
+    with open(f'{playlist}-{offset}.json', 'w', encoding='utf-8') as f:
         json.dump(resposta, f, ensure_ascii=False, indent=4)
     if resposta["next"] == None:
         print("final")
@@ -23,6 +23,18 @@ def get_playlist(offset):
     else:
         offset = offset+100
         print("nova petició")
-        get_playlist(offset)
+        get_playlist(playlist, offset)
 
-get_playlist(offset)
+for playlist in playlist_list:
+    offset = 0
+    get_playlist(playlist, offset)
+
+
+files = glob.glob("*.json")
+for file in files:
+    with open(file) as f:
+        d = json.load(f)
+        tracks = d["items"]
+        for track in tracks:
+            name = track["tracks"]["name"]
+            print(name)
