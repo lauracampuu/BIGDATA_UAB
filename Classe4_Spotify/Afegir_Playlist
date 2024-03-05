@@ -1,1 +1,49 @@
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+import pandas as pd
+import json
+
+
+
+api_client_id = "" 
+api_client_secret = ""
+
+spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(api_client_id, api_client_secret))
+
+playlist_id = "37i9dQZF1DXaxEKcoCdWHD"
+
+def get_playlist_tracks(playlist_id):
+    tracks = spotify.playlist_tracks(playlist_id)
+    return tracks
+
+def get_related_artists(artist_id):
+    response = spotify.artist_related_artists(artist_id)
+    return response
+
+def get_artist_recommendations(artist_id):
+    related_artists = get_related_artists(artist_id)
+    recommendations = []
+    for artist in related_artists['artists']:
+        recommendations.append(get_related_artists(artist['id']))
+    return recommendations
+
+playlist_tracks = get_playlist_tracks(playlist_id)
+
+artist_recommendations = []
+for track in playlist_tracks['items']:
+    for artist in track['track']['artists']:
+        print("Artista:", artist['name'])
+        print("ID del Artista:", artist['id'])
+        recommendations = get_artist_recommendations(artist['id'])
+        print("Recomendaciones:", recommendations)
+        artist_recommendations.extend(recommendations)
+
+print("Número total de recomendaciones:", len(artist_recommendations))
+
+with open('artist_recommendations.json', 'w', encoding='utf-8') as f:
+    json.dump(artist_recommendations, f, ensure_ascii=False, indent=4)
+
+df = pd.DataFrame(artist_recommendations)
+print(df)
+df.to_csv("graf_playlists.csv", sep=",", index=False)
 
