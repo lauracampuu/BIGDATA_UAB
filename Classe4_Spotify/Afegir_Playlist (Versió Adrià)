@@ -36,5 +36,14 @@ for file in files:
         d = json.load(f)
         tracks = d["items"]
         for track in tracks:
-            name = track["tracks"]["name"]
-            print(name)
+            track_dict = {}
+            track_dict["name"] = track["track"]["name"]
+            track_dict["popularity"] = track["track"]["popularity"]
+            track_dict["artist_name"] = track["tracks"]["artists"][0]["name"]
+            track_dict["duracio_ms"] = track["track"]["duration_ms"]
+            track_dict["duracio_min"] = round (track["track"]["duration_ms"]/1000/60, 2)
+
+            list.tracks.append(track_dict)
+
+df = pd.DataFrame.from_dict(list_tracks)
+df.to_csv("output.csv", index=False)
