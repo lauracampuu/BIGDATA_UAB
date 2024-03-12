@@ -1,0 +1,39 @@
+import pandas as pd
+import isodate
+
+df = pd.read_excel("dataset.xlsx")
+
+average_views = df["viewCount"].mean()
+average_comments = df["commentCount"].mean()
+average_likes = df["likeCount"].mean()
+
+df["desviacio_likes_total"] = average_likes - df["likeCount"]
+df["desviacio_likes_total_2"] = df["likeCount"].mean() - df["likeCount"]
+
+
+#desviacions absolutes i porcentuals
+
+
+df["desviacion_abs_espectadores"] = df["viewCount"] - average_views
+df["desviacion_abs_comentarios"] = df["commentCount"] - average_comments
+df["desviacion_abs_likes"] = df["likeCount"] - average_likes
+
+df["desviacion_pct_espectadores"] = (df["desviacion_abs_espectadores"] / average_views) * 100
+df["desviacion_pct_comentarios"] = (df["desviacion_abs_comentarios"] / average_comments) * 100
+df["desviacion_pct_likes"] = (df["desviacion_abs_likes"] / average_likes) * 100
+
+# video mes vist
+
+# video mes commentat
+
+
+df = df.drop("channelId","categoryId","channelTitle", "tags", "publishedAt", axis=1)
+
+"""
+print(df)
+print(df.columns)
+print(average_views, average_likes, average_comments)
+df.to_excel("final.xlsx")"""
+
+index = df["viewCount"].idmax()
+print(df.iloc[[index]])
