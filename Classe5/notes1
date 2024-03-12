@@ -1,0 +1,62 @@
+import pandas as pd
+
+notes = [1,6,8,9,10,6,5]
+alumnes = ["Jaume", "Carles", "Cristina", "Josep", "Rafael", "Agnès", "Marta"]
+cognoms = ["Tort","Soldevila","Luna","Muñoz","Fernandez","Hernandez", "Llopart"]
+
+notes_arreglades = []
+noms_complets = []
+notes_textuals = []
+
+#sumar 1 punt a cada nota (sense superar 10)
+for nota in notes:
+    if nota < 10:
+        nota = nota +1
+        notes_arreglades.append(nota)
+    else:
+        nota
+        notes_arreglades.append(nota)
+
+
+#dades dels alumnes
+
+for nom, cognom in zip(alumnes, cognoms):
+    nom_complet = nom+ " "+cognom
+    noms_complets.append(nom_complet)
+
+for n in notes_arreglades:
+    if n < 5:
+        valor = "suspes"
+        notes_textuals.append(valor)
+    elif n >=5 and <= 6:
+        valor = "aprovat"
+        notes_textuals.append(valor)
+    elif n >=6 and <=7:
+        valor = "bé"
+        notes_textuals.append(valor)
+    elif n >=7 and <=8:
+        valor = "notable"
+        notes_textuals.append(valor)
+    else:
+        valor = "excelent"
+        notes_textuals.append(valor)
+
+print(notes_textuals)
+print(noms_complets)
+print(notes_arreglades)
+
+
+dades = {}
+llista_final = []
+
+for nota, nom, q in zip(notes_arreglades, noms_complets, notes_textuals):
+    dades["nom alumne"] = nom
+    dades["nota"] = nota
+    dades["qualificacio"] = q
+    llista_final.append(dades)
+
+df = pd.DataFrame(llista_final)
+
+print(df)
+
+df.to_csv("dades.csv")
